@@ -15,7 +15,7 @@ import org.springframework.ui.ModelMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,8 +35,21 @@ public class LogSimulatorControllerTest extends Assert{
       when(logServiceImplMock.getAllLog()).thenReturn(new ArrayList());
         String result = logSimulatorController.getAllLog(new ModelMap());
         assertEquals("allLog", result);
+        verify(logServiceImplMock,times(1)).getAllLog();
+        verify(logServiceImplMock,atLeast(1)).getAllLog();
+        verify(logServiceImplMock,atLeastOnce()).getAllLog();
+        verify(logServiceImplMock,only()).getAllLog();
+        verify(logServiceImplMock,never()).dummy(); //verify(logServiceImplMock,times(0)).dummy();
+        verify(logServiceImplMock,times(0)).dummy();
+        verify(logServiceImplMock,atMost(3)).dummy();
     }
-
+    @Test
+    public void getAllLog__serviceDown__errorPageWasReturn(){
+        when(logServiceImplMock.getAllLog()).thenThrow(CannotCreateTransactionException.class);
+        String result = logSimulatorController.getAllLog(new ModelMap());
+        assertEquals("error", result);
+        verifyZeroInteractions(robotCustomer1,robotCustomer2);
+    }
     @Test
     public void getAllLog__getLogList__logWasReturn(){
         ModelMap model = new ModelMap();
@@ -47,12 +60,7 @@ public class LogSimulatorControllerTest extends Assert{
         assertEquals(result, model.get("logList"));
     }
 
-    @Test
-    public void getAllLog__serviceDown__errorPageWasReturn(){
-       when(logServiceImplMock.getAllLog()).thenThrow(CannotCreateTransactionException.class);
-      String result = logSimulatorController.getAllLog(new ModelMap());
-      assertEquals("error", result);
-    }
+
     @Test
     public void getAllLog__logReturnNull__errorPageWasReturn(){
       when(logServiceImplMock.getAllLog()).thenReturn(null);

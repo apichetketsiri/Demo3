@@ -40,6 +40,10 @@ public class LogServiceImpl implements LogService {
         return null;
 
     }
+    @Override
+    public void dummy(){
+        System.out.println("Dummy Method");
+    }
 
     public List getLog() {
         return log;

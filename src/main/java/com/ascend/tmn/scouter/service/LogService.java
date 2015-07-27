@@ -11,6 +11,6 @@ import java.util.List;
 public interface LogService {
 
     public List<KioskLog> getAllLog();
-
+    public void dummy();
 
 }

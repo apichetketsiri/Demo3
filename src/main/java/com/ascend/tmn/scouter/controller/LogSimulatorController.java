@@ -31,6 +31,10 @@ public class LogSimulatorController {
     @RequestMapping(method=RequestMethod.GET)
     public String getAllLog(ModelMap model){
         List log = null;
+//        logService.dummy();
+//        logService.dummy();
+//        logService.dummy();
+//        logService.dummy();
         try {
              log = logService.getAllLog();
         }
